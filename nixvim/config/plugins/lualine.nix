@@ -1,6 +1,6 @@
 {
     plugins.lualine = {
         enable = true;
-        iconsEnabled = true;
+        icons_enabled = true;
     };
 }

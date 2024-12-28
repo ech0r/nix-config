@@ -3,15 +3,16 @@
 
   inputs = {
 
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     nixvim = {
-      url = "github:nix-community/nixvim/nixos-24.05";
+      url = "path:/etc/nixos/nixvim";
+      #url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-24.05";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -74,7 +75,7 @@
           };
 
         # ==== AUDIO ====
-          sound.enable = true;
+          #sound.enable = true;
           hardware.pulseaudio.enable = false;
           security.rtkit.enable = true;
           services.pipewire = {
@@ -90,18 +91,20 @@
 
         # ==== FONTS ====
           fonts.packages = with pkgs; [
-            (nerdfonts.override { fonts = [ "NerdFontsSymbolsOnly" "FiraCode" "DroidSansMono" ]; })
             cantarell-fonts
-            fira-code
-            fira-code-symbols
+            nerd-fonts.fira-code
+	    nerd-fonts.symbols-only
+	    nerd-fonts.droid-sans-mono
           ];
 
         # ==== OPENGL ==== 
-        hardware.opengl = {
-          enable = true;
-          driSupport = true;
-          driSupport32Bit = true;
-        };
+        #hardware.opengl = {
+        #  enable = true;
+        #  #driSupport = true;
+        #  enable32Bit = true;
+        #};
+        
+        hardware.graphics.enable = true;
 
         # ==== NVIDIA ====
           services.xserver.videoDrivers = ["nvidia"];

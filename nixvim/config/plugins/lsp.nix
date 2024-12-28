@@ -2,7 +2,7 @@
     plugins.lsp = {
         enable = true;
         servers = {
-            rust-analyzer = {
+            rust_analyzer = {
                 enable = true;
                 installRustc = false;
                 installCargo = false;
@@ -11,8 +11,8 @@
             gopls.enable = true;
             dockerls.enable = true;
             bashls.enable = true;
-            nil-ls.enable = true;
-            lua-ls.enable = true;
+            nil_ls.enable = true;
+            lua_ls.enable = true;
         };
     };
     plugins.lsp-lines = {
