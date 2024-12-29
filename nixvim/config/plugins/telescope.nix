@@ -15,13 +15,16 @@
             "<C-p>" = "git_files";
             "<leader>p" = "oldfiles";
             "<C-f>" = "live_grep";
-            # search a path with find_files
-            "<leader>fp" = {
-              action = ''<cmd>require("telescope.builtin").find_files({ cwd = vim.fn.input("Enter path: ", vim.fn.getcwd()) })<CR>'';
-            };
         };
         extensions = {
           fzf-native.enable = true;
         };
+        luaConfig.pre = ''
+          local search_path = function()
+            local path = vim.fn.input("Enter path to search: ")
+            require("telescope.builtin").find_files({search_dirs={path}})
+          end
+          vim.keymap.set('n', '<leader>fp', search_path)
+        '';
     };
 }

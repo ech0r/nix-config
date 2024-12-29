@@ -58,6 +58,7 @@
             # M = Alt key
             "<M-k>" = ":move-2<CR>";
             "<M-j>" = ":move+<CR>";
+
           };
         visual = 
           lib.mapAttrsToList

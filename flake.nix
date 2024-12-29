@@ -34,9 +34,14 @@
           ({ config, lib, pkgs, ... }: {
 
         # ==== BOOT ==== 
-        boot.loader.systemd-boot.enable = true;
-        boot.loader.efi.canTouchEfiVariables = true;
-        boot.initrd.luks.devices."luks-2d406786-24e7-4317-8bb2-2b78bb9a9931".device = "/dev/disk/by-uuid/2d406786-24e7-4317-8bb2-2b78bb9a9931";
+          boot.loader.systemd-boot.enable = true;
+          boot.loader.efi.canTouchEfiVariables = true;
+          boot.initrd.luks.devices."luks-2d406786-24e7-4317-8bb2-2b78bb9a9931".device = "/dev/disk/by-uuid/2d406786-24e7-4317-8bb2-2b78bb9a9931";
+
+        # ==== STORAGE ====
+          boot.supportedFilesystems = [ "zfs" ];
+          boot.zfs.forceImportRoot = false;
+          networking.hostId = "28133080";
 
         # ==== NETWORK ====
           networking.hostName = "nixos"; 
@@ -157,6 +162,8 @@
             direnv
             docker
             docker-compose
+            git 
+            zfs
             xclip
           ];
 

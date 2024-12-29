@@ -36,7 +36,9 @@ in
     neofetch
     nnn # terminal file manager
 
-    # email
+    # terminal
+    kitty
+    ghostty
 
     # archives
     zip
