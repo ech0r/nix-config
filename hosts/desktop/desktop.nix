@@ -1,6 +1,10 @@
 { config, pkgs, ... }:
 {
-          imports = [ ./hardware-configuration.nix ];
+  imports = [ 
+    ../../shared/home-manager/home-manager.nix
+    ./hardware-configuration.nix 
+
+  ];
 
         # ==== BOOT ==== 
           boot.loader.systemd-boot.enable = true;

@@ -1,4 +1,4 @@
-{ self, config, lib, pkgs, inputs, ... }:
+{ config, pkgs, lib, inputs, ... }:
 
 let
   # Reference the nvim package from the nixvim flake
