@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, nixvim, ... }:
 {
   imports = [ 
     ../../shared/home-manager/home-manager.nix

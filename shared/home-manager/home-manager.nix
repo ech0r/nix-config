@@ -1,13 +1,12 @@
-{ inputs, config, pkgs, lib, ... }:
+{ config, pkgs, lib, nixvim, homeManagerModule, ... }:
 
 {
   imports = [
-    (inputs.home-manager.nixosModules.home-manager)
+    homeManagerModule
   ];
   home-manager.useGlobalPkgs = true;
   home-manager.useUserPackages = true;
-  home-manager.users.john = import ./home.nix {
-    inherit inputs;
-    inherit lib;
+  home-manager.users.john = import ./john.nix {
+    inherit config pkgs lib nixvim;
   };
 }

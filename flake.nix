@@ -4,7 +4,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nixvim = {
-      url = "path:/etc/nixos/nixvim";
+      url = "path:./nixvim";
       #url = "github:nix-community/nixvim";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -21,7 +21,7 @@
         specialArgs = { 
           inherit nixvim; 
           inherit (nixpkgs) lib;
-          inherit inputs;
+          homeManagerModule = home-manager.nixosModules.home-manager;
         };
         system = "x86_64-linux";
         modules = [ ./hosts/desktop/desktop.nix ];

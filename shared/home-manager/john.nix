@@ -1,8 +1,8 @@
-{ config, pkgs, lib, inputs, ... }:
+{ config, pkgs, lib, nixvim, ... }:
 
 let
   # Reference the nvim package from the nixvim flake
-  nvim = inputs.nixvim.packages.x86_64-linux.default;
+  nvim = nixvim.packages.x86_64-linux.default;
 in
 {
 
