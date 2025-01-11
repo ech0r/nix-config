@@ -102,9 +102,9 @@
 
         # ==== UDEV ====
           services.udev.extraRules = ''
-          ${builtins.readFile ./udev/50-zsa.rules}
-          ${builtins.readFile ./udev/50-stm.rules}
-          ${builtins.readFile ./udev/69-probe-rs.rules}
+          ${builtins.readFile ../../shared/udev/50-zsa.rules}
+          ${builtins.readFile ../../shared/udev/50-stm.rules}
+          ${builtins.readFile ../../shared/udev/69-probe-rs.rules}
           '';
 
         # ==== CUPS ====
