@@ -1,6 +1,5 @@
 {
   description = "John's NixOS Config";
-
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nixvim = {
@@ -14,8 +13,7 @@
     };
 
   };
-
-  outputs = { self, nixpkgs, nixvim, home-manager, ... }@inputs: {
+  outputs = { nixpkgs, nixvim, home-manager, ... }: {
     nixosConfigurations = {
       desktop = nixpkgs.lib.nixosSystem {
         specialArgs = { 
@@ -34,5 +32,6 @@
         system = "x86_64-linux";
         modules = [ ./hosts/server/netboot.nix ];
      };
+    };
   };
 }
