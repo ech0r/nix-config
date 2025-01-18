@@ -2,20 +2,36 @@
 
 {
   # Import the hardware configuration dynamically
+  import = [
+    /mnt/etc/nixos/hardware-configuration.nix
+  ];
   # Basic system settings
   networking.hostName = "nuc"; # Hostname for your NUC
   time.timeZone = "America/Los_Angeles"; # Adjust to your timezone
 
+  #nix settings
+  nix.settings.experimental-features = ["nix-command" "flakes"];
+
+
+
   # Boot settings
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.supportedFileSystems = ["zfs"];
+  
+  boot.zfs.extraPools = ["storage"];
+
+  services.zfs = {
+    enable = true;
+    autoMount = true;
+  };
 
   # Users
   users.users.john = {
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Add user to sudo group
     openssh.authorizedKeys.keyFiles = [ 
-      "../../shared/authorized_keys"
+      ../../shared/authorized_keys
     ];
   };
 
@@ -45,6 +61,13 @@
     htop
     tmux
   ];
+
+  services.jellyfin = {
+    enable = true;
+    dataDir = "/storage/jellyfin/data";
+    bindAddress = "0.0.0.0";
+  };
+  networking.firewall.allowedTCPParts = [ 8096 8920 ];
 
   # Optional: Home-Manager (if you're using it)
   # programs.home-manager.enable = true;
