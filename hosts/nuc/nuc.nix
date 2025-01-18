@@ -29,12 +29,12 @@
 
   # Users
   users.users.root = {
-    hashedPassword = "$6$aKizz2yq02x5K0QA$xVGMp4iprpgTBZ58oa73oHi4pan4GlVgZhJZMpROZ0cUKPA2wZBrQ0ZccvlSAL2huyrHH98PyHY4zaDYMcQg70";
+    hashedPassword = ''$6$aKizz2yq02x5K0QA$xVGMp4iprpgTBZ58oa73oHi4pan4GlVgZhJZMpROZ0cUKPA2wZBrQ0ZccvlSAL2huyrHH98PyHY4zaDYMcQg70'';
   };
 
   users.users.john = {
     isNormalUser = true;
-    hashedPassword = "$6$w30qlt2dFpBntIJe$LAnC1/YATMLCX2prohxVvvXS9VxvZJqjXN1uJlts.6FcTS3ac42QdTcbUijbtyM/lZrGXEZXWeSU8WREhYYkQ1";
+    hashedPassword = ''$6$IWzN/g2rPyMKpb/b$k9sXeq.YutOps0DxISkXSiUCZHhdffoNxsN4hHFlMqzxZ84RUiXrmNh22dHsiaZiEcuoGtH7ekQyrgV/a3I.I0'';
     extraGroups = [ "wheel" ]; # Add user to sudo group
     openssh.authorizedKeys.keyFiles = [ 
       ../../shared/authorized_keys
@@ -84,17 +84,6 @@
   systemd.services.jellyfin.environment = {
     JELLYFIN_DATA_DIR = "/storage/jellyfin/data";    
     JELLYFIN_CONFIG_DIR = "/storage/jellyfin/config";    
-  };
-
-  system.activationScripts.migrateJellyfinToZFS = {
-    text = ''
-      if [-d /storage/jellyfin ]; then
-        chown -R jellyfin:jellyfin /storage/jellyfin
-        rm -rf /var/lib/jellyfin/*
-        ln -s /storage/jellyfin/config /var/lib/jellyfin/conf 
-        ln -s /storage/jellyfin/data /var/lib/jellyfin/data
-      fi
-    '';
   };
 
   # Optional: Home-Manager (if you're using it)
