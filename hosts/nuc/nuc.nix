@@ -4,7 +4,7 @@
   
   # Import the hardware configuration dynamically
   imports = [
-    /mnt/etc/nixos/hardware-configuration.nix
+    /etc/nixos/hardware-configuration.nix
   ];
   
   # Basic system settings
