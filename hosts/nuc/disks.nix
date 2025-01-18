@@ -1,4 +1,6 @@
+{ disko, ... }:
 {
+  imports = [disko.nixosModules.disko];
   disko.devices = {
     disk = {
       main = {
@@ -18,7 +20,7 @@
               };
             };
             root = {
-              size = 100%;
+              size = "100%";
               content = {
                 type = "filesystem";
                 format = "ext4";
