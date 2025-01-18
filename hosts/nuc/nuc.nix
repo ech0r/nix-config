@@ -78,9 +78,12 @@
 
   services.jellyfin = {
     enable = true;
-    dataDir = /var/lib/jellyfin/conf;
-    configDir = /var/lib/jellyfin/data;
     openFirewall = true;
+  };
+
+  systemd.services.jellyfin.environment = {
+    JELLYFIN_DATA_DIR = "/storage/jellyfin/data";    
+    JELLYFIN_CONFIG_DIR = "/storage/jellyfin/config";    
   };
 
   system.activationScripts.migrateJellyfinToZFS = {
