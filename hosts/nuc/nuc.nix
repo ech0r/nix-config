@@ -1,12 +1,13 @@
 { config, pkgs, lib, ... }:
 
 {
+  
   # Import the hardware configuration dynamically
   imports = [
     /mnt/etc/nixos/hardware-configuration.nix
   ];
+  
   # Basic system settings
-  networking.hostName = "nuc"; # Hostname for your NUC
   time.timeZone = "America/Los_Angeles"; # Adjust to your timezone
 
   #nix settings
@@ -17,7 +18,9 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   boot.supportedFilesystems = [ "zfs" ];
+  boot.zfs.forceImportRoot = false;
   boot.zfs.extraPools = ["storage"];
+
 
   # Users
   users.users.root = {
@@ -34,6 +37,8 @@
   };
 
   # Networking
+  networking.hostName = "nuc"; # Hostname for your NUC
+  networking.hostId = "28133081";
   networking.networkmanager.enable = true; # Use NetworkManager
   networking.firewall.allowedTCPPorts = [ 22 ];
   networking.firewall.enable = true;
