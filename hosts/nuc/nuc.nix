@@ -85,9 +85,9 @@
 
   system.activationScripts.createJellyfinTempDirs = {
     text = ''
-      mkdir -p /var/lib/jellyfin/conf
-      mkdir -p /var/lib/jellyfin/data
-      chown -R jellyfin:jellyfin /var/lib/jellyfin
+      mkdir -p /mnt/var/lib/jellyfin/conf
+      mkdir -p /mnt/var/lib/jellyfin/data
+      chown -R jellyfin:jellyfin /mnt/var/lib/jellyfin
     '';
   };
 
