@@ -18,9 +18,6 @@
 
   boot.supportedFilesystems = [ "zfs" ];
   boot.zfs.extraPools = ["storage"];
-  services.zfs = {
-    enable = true;
-  };
 
   # Users
   users.users.root = {
