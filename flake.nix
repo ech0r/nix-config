@@ -11,9 +11,13 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
   };
-  outputs = { nixpkgs, nixvim, home-manager, ... }: {
+  outputs = { nixpkgs, nixvim, home-manager, disko, ... }: {
     nixosConfigurations = {
       desktop = nixpkgs.lib.nixosSystem {
         specialArgs = { 
@@ -25,8 +29,12 @@
         modules = [ ./hosts/desktop/desktop.nix ];
       }; 
       nuc = nixpkgs.lib.nixosSystem {
+        specialArgs = {
+          inherit disko;
+        };
         system = "x86_64-linux";
         modules = [ 
+          ./hosts/nuc/disks.nix
           ./hosts/nuc/nuc.nix 
         ];
      };
