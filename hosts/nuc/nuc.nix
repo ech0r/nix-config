@@ -2,9 +2,9 @@
 
 {
   # Import the hardware configuration dynamically
-  # imports = [
-  #   /mnt/etc/nixos/hardware-configuration.nix
-  # ];
+  imports = [
+    /mnt/etc/nixos/hardware-configuration.nix
+  ];
   # Basic system settings
   networking.hostName = "nuc"; # Hostname for your NUC
   time.timeZone = "America/Los_Angeles"; # Adjust to your timezone
