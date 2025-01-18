@@ -15,13 +15,11 @@
   # Boot settings
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+
   boot.supportedFilesystems = [ "zfs" ];
-
   boot.zfs.extraPools = ["storage"];
-
   services.zfs = {
     enable = true;
-    autoMount = true;
   };
 
   # Users
