@@ -21,6 +21,7 @@
           networking.networkmanager.enable = true;
           hardware.bluetooth.enable = true; # enables support for Bluetooth
           hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
+          networking.firewall.allowedUDPPorts = [ 69 ];
 
         # ==== NIX FLAKES ====
           nix.settings.experimental-features = [ "nix-command" "flakes" ];
@@ -52,6 +53,7 @@
             xkb.variant = "";
           };
 
+
         # ==== AUDIO ====
           #sound.enable = true;
           hardware.pulseaudio.enable = false;
@@ -75,7 +77,7 @@
           #   ];
           # };
 
-        # ==== FONTS ====
+        # ==== FONTS ====;
           fonts.packages = with pkgs; [
             cantarell-fonts
             nerd-fonts.fira-code
@@ -140,6 +142,7 @@
 
         # ==== SYSTEM PACKAGES ====
           environment.systemPackages = with pkgs; [
+            grub2
             gcc
             direnv
             docker

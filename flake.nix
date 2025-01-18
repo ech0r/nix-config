@@ -24,13 +24,11 @@
         system = "x86_64-linux";
         modules = [ ./hosts/desktop/desktop.nix ];
       }; 
-      netboot = nixpkgs.lib.nixosSystem {
-        specialArgs = {
-          inherit nixvim;
-          inherit (nixpkgs) lix;
-        };
+      nuc = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        modules = [ ./hosts/server/netboot.nix ];
+        modules = [ 
+          ./hosts/nuc/nuc.nix 
+        ];
      };
     };
   };
