@@ -1,11 +1,7 @@
-{ config, pkgs, lib, hardwareConfig, ... }:
+{ config, pkgs, lib, ... }:
 
 {
   # Import the hardware configuration dynamically
-  imports = [
-    hardwareConfig
-  ];
-
   # Basic system settings
   networking.hostName = "nuc"; # Hostname for your NUC
   time.timeZone = "America/Los_Angeles"; # Adjust to your timezone
