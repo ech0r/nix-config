@@ -15,16 +15,20 @@
   # Boot settings
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  # boot.supportedFilesystems = [ "zfs" ];
-  #
-  # boot.zfs.extraPools = ["storage"];
-  #
-  # services.zfs = {
-  #   enable = true;
-  #   autoMount = true;
-  # };
+  boot.supportedFilesystems = [ "zfs" ];
+
+  boot.zfs.extraPools = ["storage"];
+
+  services.zfs = {
+    enable = true;
+    autoMount = true;
+  };
 
   # Users
+  users.users.root = {
+    hashedPassword = "$6$aKizz2yq02x5K0QA$xVGMp4iprpgTBZ58oa73oHi4pan4GlVgZhJZMpROZ0cUKPA2wZBrQ0ZccvlSAL2huyrHH98PyHY4zaDYMcQg70";
+  };
+
   users.users.john = {
     isNormalUser = true;
     hashedPassword = "$6$w30qlt2dFpBntIJe$LAnC1/YATMLCX2prohxVvvXS9VxvZJqjXN1uJlts.6FcTS3ac42QdTcbUijbtyM/lZrGXEZXWeSU8WREhYYkQ1";
@@ -67,12 +71,12 @@
     tmux
   ];
 
-  # services.jellyfin = {
-  #   enable = true;
-  #   dataDir = /storage/jellyfin/data;
-  #   configDir = /storage/jellyfin/config;
-  #   openFirewall = true;
-  # };
+  services.jellyfin = {
+    enable = true;
+    dataDir = /storage/jellyfin/data;
+    configDir = /storage/jellyfin/config;
+    openFirewall = true;
+  };
 
   # Optional: Home-Manager (if you're using it)
   # programs.home-manager.enable = true;
