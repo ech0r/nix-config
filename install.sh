@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export NIX_CONFIG="experimental-features nix-command flakes"
+NIX_CONFIG="experimental-features nix-command flakes"
 
 nix run github:nix-community/disko/latest -- mode destroy,format,mount "./hosts/$1/disks.nix"
 
