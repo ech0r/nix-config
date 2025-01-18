@@ -17,15 +17,11 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # ==== STORAGE ====
   boot.supportedFilesystems = [ "zfs" ];
-  
-  fileSystems."/storage" = {
-    device = "storage";
-    fsType = "zfs";
-  };
-
   boot.zfs.forceImportRoot = false;
-  boot.zfs.extraPools = ["storage"];
+  services.zfs.autoScrub.enable = true;
+  
 
   # Users
   users.users.root = {
