@@ -76,21 +76,12 @@
     tmux
   ];
 
-  system.activationScripts.createJellyfinTempDirs = {
-    text = ''
-      mkdir -p /mnt/var/lib/jellyfin/conf
-      mkdir -p /mnt/var/lib/jellyfin/data
-      chown -R jellyfin:jellyfin /mnt/var/lib/jellyfin
-    '';
-  };
-
   services.jellyfin = {
     enable = true;
     dataDir = /var/lib/jellyfin/conf;
     configDir = /var/lib/jellyfin/data;
     openFirewall = true;
   };
-
 
   system.activationScripts.migrateJellyfinToZFS = {
     text = ''
