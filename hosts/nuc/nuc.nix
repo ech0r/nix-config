@@ -70,16 +70,14 @@
     git
     htop
     tmux
+    jellyfin
+    jellyfin-web
+    jellyfin-ffmpeg
   ];
 
   services.jellyfin = {
     enable = true;
     openFirewall = true;
-  };
-
-  systemd.services.jellyfin.environment = {
-    JELLYFIN_DATA_DIR = "/storage/jellyfin/data";    
-    JELLYFIN_CONFIG_DIR = "/storage/jellyfin/config";    
   };
 
   # Optional: Home-Manager (if you're using it)
