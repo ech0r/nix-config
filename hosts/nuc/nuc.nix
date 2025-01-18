@@ -87,8 +87,7 @@
     text = ''
       if [-d /storage/jellyfin ]; then
         chown -R jellyfin:jellyfin /storage/jellyfin
-        rm -rf /var/lib/jellyfin/conf
-        rm -rf /var/lib/jellyfin/data
+        rm -rf /var/lib/jellyfin/*
         ln -s /storage/jellyfin/config /var/lib/jellyfin/conf 
         ln -s /storage/jellyfin/data /var/lib/jellyfin/data
       fi
