@@ -18,9 +18,14 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   boot.supportedFilesystems = [ "zfs" ];
+  
+  fileSystems."/storage" = {
+    device = "storage";
+    fsType = "zfs";
+  };
+
   boot.zfs.forceImportRoot = false;
   boot.zfs.extraPools = ["storage"];
-
 
   # Users
   users.users.root = {
@@ -73,9 +78,29 @@
 
   services.jellyfin = {
     enable = true;
-    dataDir = /storage/jellyfin/data;
-    configDir = /storage/jellyfin/config;
+    dataDir = /var/lib/jellyfin/conf;
+    configDir = /var/lib/jellyfin/data;
     openFirewall = true;
+  };
+
+  system.activationScripts.createJellyfinTempDirs = {
+    text = ''
+      mkdir -p /var/lib/jellyfin/conf
+      mkdir -p /var/lib/jellyfin/data
+      chown -R jellyfin:jellyfin /var/lib/jellyfin
+    '';
+  };
+
+  system.activationScripts.migrateJellyfinToZFS = {
+    text = ''
+      if [-d /storage/jellyfin ]; then
+        chown -R jellyfin:jellyfin /storage/jellyfin
+        rm -rf /var/lib/jellyfin/conf
+        rm -rf /var/lib/jellyfin/data
+        ln -s /storage/jellyfin/config /var/lib/jellyfin/conf 
+        ln -s /storage/jellyfin/data /var/lib/jellyfin/data
+      fi
+    '';
   };
 
   # Optional: Home-Manager (if you're using it)
