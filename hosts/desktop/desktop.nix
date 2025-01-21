@@ -2,8 +2,6 @@
 {
   imports = [ 
     ../../shared/home-manager/home-manager.nix
-    ./hardware-configuration.nix 
-
   ];
 
         # ==== BOOT ==== 

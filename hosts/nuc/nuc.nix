@@ -2,10 +2,10 @@
 
 {
   
-  # Import the hardware configuration dynamically
-  imports = [
-    /etc/nixos/hardware-configuration.nix
-  ];
+  # # Import the hardware configuration dynamically
+  # imports = [
+  #   /etc/nixos/hardware-configuration.nix
+  # ];
   
   # Basic system settings
   time.timeZone = "America/Los_Angeles"; # Adjust to your timezone
@@ -38,11 +38,20 @@
   };
 
   # Networking
-  networking.hostName = "nuc"; # Hostname for your NUC
-  networking.hostId = "28133081";
-  networking.networkmanager.enable = true; # Use NetworkManager
-  networking.firewall.allowedTCPPorts = [ 22 ];
-  networking.firewall.enable = true;
+  networking = {
+    hostName = "nuc";
+    hostId = "28133081";
+    interfaces.enp0s31f6 = {
+      ipv4.addresses = [{
+        address = "192.168.1.8";
+        prefixLength = "24";
+      }];
+    };
+    firewall = {
+      enable = true;
+      allowedTCPPorts = [ 22 ];
+    };
+  };
 
   # Services
   services.openssh = {
