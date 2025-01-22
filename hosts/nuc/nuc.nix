@@ -2,10 +2,10 @@
 
 {
   
-  # # Import the hardware configuration dynamically
-  # imports = [
-  #   /etc/nixos/hardware-configuration.nix
-  # ];
+  # Import the hardware configuration dynamically
+  imports = [
+    ./hardware-configuration.nix
+  ];
   
   # Basic system settings
   time.timeZone = "America/Los_Angeles"; # Adjust to your timezone
