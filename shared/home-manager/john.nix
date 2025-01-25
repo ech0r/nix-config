@@ -8,7 +8,6 @@ in
 
   home.username = "john";
   home.homeDirectory = "/home/john";
-
   # set cursor size and dpi for 4k monitor
   xresources.properties = {
     "Xcursor.size" = 12;
@@ -32,6 +31,9 @@ in
 
     # engineering
     gnuradio
+
+    # nix provisioning
+    nixos-anywhere
 
     neofetch
     nnn # terminal file manager

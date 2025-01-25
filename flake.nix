@@ -33,8 +33,10 @@
         };
         system = "x86_64-linux";
         modules = [ 
+          disko.nixosModules.disko
           ./hosts/nuc/nuc.nix 
           ./hosts/nuc/disks.nix
+          ./hosts/nuc/hardware-configuration.nix
         ];
      };
     };

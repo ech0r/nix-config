@@ -22,6 +22,11 @@
           hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
           networking.firewall.allowedUDPPorts = [ 69 ];
 
+        # ==== ENVIRONMENT ====
+          environment.variables = {
+            NIXPKGS_ALLOW_UNFREE = "1";
+          };
+
         # ==== NIX FLAKES ====
           nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
