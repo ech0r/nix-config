@@ -22,6 +22,10 @@
   boot.zfs.forceImportRoot = false;
   services.zfs.autoScrub.enable = true;
   
+  fileSystems."/storage" =
+    { device = "zpool/storage";
+      fsType = "zfs";
+    };
 
   # Users
   users.users.root = {
