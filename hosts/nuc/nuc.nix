@@ -23,7 +23,7 @@
   services.zfs.autoScrub.enable = true;
   
   fileSystems."/storage" =
-    { device = "zpool/storage";
+    { device = "storage";
       fsType = "zfs";
     };
 
