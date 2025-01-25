@@ -3,8 +3,8 @@
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
   outputs = { self, nixpkgs }: {
     nixosConfigurations = {
-      exampleIso = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
+      default = nixpkgs.lib.nixosSystem {
+        exampleIso = "x86_64-linux";
         modules = [
           ({ pkgs, modulesPath, ... }: {
             imports = [ (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix") ];
