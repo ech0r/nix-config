@@ -1,44 +1,21 @@
 {
-  description = "John's NixOS Config";
-  inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    nixvim = {
-      url = "path:./nixvim";
-      #url = "github:nix-community/nixvim";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    disko = {
-      url = "github:nix-community/disko";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-  };
-  outputs = { nixpkgs, nixvim, home-manager, disko, ... }: {
+  description = "Minimal Installer with SSH and root login";
+  inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+  outputs = { self, nixpkgs }: {
     nixosConfigurations = {
-      desktop = nixpkgs.lib.nixosSystem {
-        specialArgs = { 
-          inherit nixvim; 
-          inherit (nixpkgs) lib;
-          homeManagerModule = home-manager.nixosModules.home-manager;
-        };
+      exampleIso = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        modules = [ ./hosts/desktop/desktop.nix ];
-      }; 
-      nuc = nixpkgs.lib.nixosSystem {
-        specialArgs = {
-          inherit disko;
-        };
-        system = "x86_64-linux";
-        modules = [ 
-          disko.nixosModules.disko
-          ./hosts/nuc/nuc.nix 
-          ./hosts/nuc/disks.nix
-          ./hosts/nuc/hardware-configuration.nix
+        modules = [
+          ({ pkgs, modulesPath, ... }: {
+            imports = [ (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix") ];
+            environment.systemPackages = [ pkgs.neovim ];
+            users.users.root.openssh.authorizedKeys.keyFiles = [
+              ../../shared/authorized_keys
+            ];
+          })
         ];
-     };
+      };
     };
   };
 }
+
