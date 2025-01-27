@@ -16,6 +16,7 @@
   # Boot settings
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.kernelParams = [ "ipv6.disable=1" ];
 
   # ==== STORAGE ====
   boot.supportedFilesystems = [ "zfs" ];
