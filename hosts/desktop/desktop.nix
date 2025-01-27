@@ -13,14 +13,21 @@
         # ==== STORAGE ====
           boot.supportedFilesystems = [ "zfs" ];
           boot.zfs.forceImportRoot = false;
-          networking.hostId = "28133080";
 
         # ==== NETWORK ====
-          networking.hostName = "tower"; 
-          networking.networkmanager.enable = true;
+          networking = {
+            hostName = "tower"; 
+            hostId = "28133080";
+            networkmanager.enable = true;
+            enableIPv6 = false;
+            firewall = {
+              enable = true;
+              allowedUDPPorts = [ 69 ];
+            };
+          };
+          
           hardware.bluetooth.enable = true; # enables support for Bluetooth
           hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
-          networking.firewall.allowedUDPPorts = [ 69 ];
 
         # ==== ENVIRONMENT ====
           environment.variables = {
