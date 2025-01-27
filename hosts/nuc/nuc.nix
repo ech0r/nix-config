@@ -54,7 +54,7 @@
       }];
     };
     firewall = {
-      enable = true;
+      enable = false; # TODO: change this back
       allowedTCPPorts = [ 22 9420 ];
     };
   };
