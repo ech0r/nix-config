@@ -20,13 +20,9 @@
   # ==== STORAGE ====
   boot.supportedFilesystems = [ "zfs" ];
   boot.zfs.forceImportRoot = false;
+  boot.zfs.extraPools = [ "storage" ];
   services.zfs.autoScrub.enable = true;
   
-  fileSystems."/storage" =
-    { device = "storage";
-      fsType = "zfs";
-    };
-
   # Users
   users.users.root = {
     hashedPassword = ''$6$aKizz2yq02x5K0QA$xVGMp4iprpgTBZ58oa73oHi4pan4GlVgZhJZMpROZ0cUKPA2wZBrQ0ZccvlSAL2huyrHH98PyHY4zaDYMcQg70'';
@@ -35,20 +31,26 @@
   users.users.john = {
     isNormalUser = true;
     hashedPassword = ''$6$IWzN/g2rPyMKpb/b$k9sXeq.YutOps0DxISkXSiUCZHhdffoNxsN4hHFlMqzxZ84RUiXrmNh22dHsiaZiEcuoGtH7ekQyrgV/a3I.I0'';
-    extraGroups = [ "wheel" ]; # Add user to sudo group
+    extraGroups = [ "wheel" "docker" ]; # Add user to sudo group
     openssh.authorizedKeys.keyFiles = [ 
       ../../shared/authorized_keys
     ];
   };
 
+  nix.settings.trusted-users = [ "@wheel" ];
+
   # Networking
   networking = {
+    defaultGateway = "192.168.1.1";
+    nameservers = [
+      "192.168.1.5"
+    ];
     hostName = "nuc";
     hostId = "28133081";
     interfaces.enp0s31f6 = {
       ipv4.addresses = [{
         address = "192.168.1.8";
-        prefixLength = "24";
+        prefixLength = 24;
       }];
     };
     firewall = {
@@ -56,6 +58,8 @@
       allowedTCPPorts = [ 22 ];
     };
   };
+  # ==== VIRTUALIZATION ====
+    virtualisation.docker.enable = true;
 
   # Services
   services.openssh = {
@@ -79,13 +83,15 @@
 
   # Software
   environment.systemPackages = with pkgs; [
-    vim
+    docker
+    docker-compose
     git
     htop
-    tmux
     jellyfin
-    jellyfin-web
     jellyfin-ffmpeg
+    jellyfin-web
+    tmux
+    vim
   ];
 
   services.jellyfin = {
