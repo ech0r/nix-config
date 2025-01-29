@@ -32,7 +32,6 @@
           inherit disko;
           inherit nixvim; 
           inherit (nixpkgs) lib;
-         # homeManagerModule = home-manager.nixosModules.home-manager;
         };
         system = "x86_64-linux";
         modules = [ 
