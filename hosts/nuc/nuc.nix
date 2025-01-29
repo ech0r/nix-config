@@ -1,11 +1,15 @@
-{ config, pkgs, lib, ... }:
+{ config, pkgs, lib, nixvim, ... }:
+let
+  # Reference the nvim package from the nixvim flake
+  nvim = nixvim.packages.x86_64-linux.default;
+in
 
 {
   
   # Import the hardware configuration dynamically
   imports = [
     ./hardware-configuration.nix
-    ../../shared/home-manager/home-manager.nix
+#    ../../shared/home-manager/home-manager.nix
   ];
   
   # Basic system settings
@@ -95,6 +99,7 @@
     jellyfin-web
     tmux
     vim
+    nvim
   ];
 
   services.jellyfin = {
