@@ -5,6 +5,7 @@
   # Import the hardware configuration dynamically
   imports = [
     ./hardware-configuration.nix
+    ../../shared/home-manager/home-manager.nix
   ];
   
   # Basic system settings
