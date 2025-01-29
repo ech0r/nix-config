@@ -24,7 +24,12 @@
             firewall = {
               enable = true;
               allowedUDPPorts = [ 69 ];
+              allowedTCPPorts = [ 22 ];
             };
+          };
+        # Services
+          services.openssh = {
+            enable = true;
           };
           
           hardware.bluetooth.enable = true; # enables support for Bluetooth
