@@ -25,7 +25,10 @@ in
   boot.supportedFilesystems = [ "zfs" ];
   boot.zfs.forceImportRoot = false;
   boot.zfs.extraPools = [ "storage" ];
-  services.zfs.autoScrub.enable = true;
+  services.zfs = {
+    autoScrub.enable = true;
+    autoScrub.interval = "quarterly";
+  };
   
   # Users
   users.users.root = {
