@@ -47,6 +47,7 @@ in
     xz
     unzip
     p7zip
+    gzip
 
     # utils
     ripgrep # recursively searches directories for a regex pattern
@@ -54,6 +55,7 @@ in
     eza # A modern replacement for ‘ls’
     fzf # A command-line fuzzy finder
     gparted # disk utility
+    progress
 
     # networking tools
     mtr # A network diagnostic tool
