@@ -29,6 +29,9 @@ in
     autoScrub.enable = true;
     autoScrub.interval = "quarterly";
   };
+
+  # ==== Virtualization ====
+    virtualisation.libvirtd.enable = true;
   
   # Users
   users.users.root = {

@@ -73,7 +73,7 @@
 
         # ==== AUDIO ====
           #sound.enable = true;
-          hardware.pulseaudio.enable = false;
+          services.pulseaudio.enable = false;
           security.rtkit.enable = true;
           services.pipewire = {
             enable = true;
@@ -103,9 +103,9 @@
           ];
 
         # ==== OPENGL ==== 
-        hardware.opengl = {
-          enable = true;
-        };
+        # hardware.opengl = {
+        #   enable = true;
+        # };
         
         hardware.graphics = {
           enable32Bit = true;
