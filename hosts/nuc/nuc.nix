@@ -36,6 +36,9 @@ in
   # Users
   users.users.root = {
     hashedPassword = ''$6$aKizz2yq02x5K0QA$xVGMp4iprpgTBZ58oa73oHi4pan4GlVgZhJZMpROZ0cUKPA2wZBrQ0ZccvlSAL2huyrHH98PyHY4zaDYMcQg70'';
+    openssh.authorizedKeys.keyFiles = [ 
+      ../../shared/authorized_keys
+    ];
   };
 
   users.users.john = {
@@ -49,15 +52,18 @@ in
 
   nix.settings.trusted-users = [ "@wheel" ];
 
-  # Networking
+  # ==== Networking ====
   networking = {
     defaultGateway = "192.168.1.1";
     nameservers = [
       "192.168.1.5"
+      "1.1.1.1"
     ];
     hostName = "nuc";
     hostId = "28133081";
     enableIPv6 = false;
+    useDHCP = false;
+    networkmanager.enable = false;
     interfaces.enp0s31f6 = {
       ipv4.addresses = [{
         address = "192.168.1.8";
@@ -65,10 +71,11 @@ in
       }];
     };
     firewall = {
-      enable = false; # TODO: change this back
+      enable = true; # TODO: change this back
       allowedTCPPorts = [ 22 9420 ];
     };
   };
+
   # ==== VIRTUALIZATION ====
     virtualisation.docker.enable = true;
 

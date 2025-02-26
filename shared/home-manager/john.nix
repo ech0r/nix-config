@@ -17,8 +17,6 @@ in
   # Packages that should be installed to the user profile
   home.packages = with pkgs; [
     ifuse
-    nvim  # Reference the nvim package from nixvim flake
-    spotify
     firefox
     chromium
     vlc
@@ -56,6 +54,7 @@ in
     fzf # A command-line fuzzy finder
     gparted # disk utility
     progress
+    caligula # utility for disk imaging
 
     # networking tools
     mtr # A network diagnostic tool
@@ -66,6 +65,8 @@ in
     socat # replacement of openbsd-netcat
     nmap # A utility for network discovery and security auditing
     ipcalc  # it is a calculator for the IPv4/v6 addresses
+    inetutils
+    tcptraceroute
 
     # misc
     cowsay
@@ -112,6 +113,11 @@ in
 
     # emulation
     ryujinx
+
+    # editors
+    nvim  # Reference the nvim package from nixvim flake
+    emacs
+
   ];
 
   programs.kitty = lib.mkForce {

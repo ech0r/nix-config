@@ -10,6 +10,9 @@
           boot.loader.efi.canTouchEfiVariables = true;
           boot.initrd.luks.devices."luks-2d406786-24e7-4317-8bb2-2b78bb9a9931".device = "/dev/disk/by-uuid/2d406786-24e7-4317-8bb2-2b78bb9a9931";
           boot.kernelParams = [ "ipv6.disable" ];
+          boot.binfmt.emulatedSystems = [
+            "aarch64-linux"
+          ];
 
         # ==== STORAGE ====
           boot.supportedFilesystems = [ "zfs" ];
@@ -19,21 +22,43 @@
           networking = {
             hostName = "tower"; 
             hostId = "28133080";
-            networkmanager.enable = true;
+            networkmanager.enable = false;
+            useDHCP = false; 
             enableIPv6 = false;
+            interfaces = {
+              enp6s0.ipv4.addresses = [{
+                address = "192.168.1.7";
+                prefixLength = 24;
+              }];
+            };
+            defaultGateway = {
+              address = "192.168.1.1";
+              interface = "enp6s0";
+            };
+            nameservers = [ "192.168.1.5" "1.1.1.1" ];
             firewall = {
               enable = true;
-              allowedUDPPorts = [ 69 ];
               allowedTCPPorts = [ 22 ];
             };
           };
-        # Services
+
+        # ==== Services ====
           services.openssh = {
             enable = true;
           };
           
-          hardware.bluetooth.enable = true; # enables support for Bluetooth
-          hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
+          hardware.bluetooth = {
+            enable = true; # enables support for Bluetooth
+            powerOnBoot = true; # powers up the default Bluetooth controller on boot
+            settings = {
+              General = {
+                Privacy = "device";
+                JustWorksRepairing = "always";
+                Class = "0x000100";
+                FastConnectable = "true";
+              };
+            };
+          };
 
         # ==== ENVIRONMENT ====
           environment.variables = {
@@ -42,6 +67,8 @@
 
         # ==== NIX FLAKES ====
           nix.settings.experimental-features = [ "nix-command" "flakes" ];
+          nix.settings.extra-platforms = [ "aarch64-linux" ];
+
 
         # ==== UNFREE PACKAGES ====
           nixpkgs.config.allowUnfree = true;
@@ -167,6 +194,8 @@
             git 
             zfs
             xclip
+            qemu
+            linuxKernel.packages.linux_zen.xpadneo
           ];
 
         # ==== SYSTEM STATE VERSION ====
