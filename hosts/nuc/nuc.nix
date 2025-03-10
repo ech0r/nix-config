@@ -89,7 +89,7 @@ in
 
   services.avahi = {
     enable = true; # Enable Avahi for network discovery
-    nssmdns = true;
+    nssmdns4 = true;
   };
 
   # System Updates
@@ -123,5 +123,6 @@ in
 
   # Logging
   systemd.services.journal-gatewayd.enable = true; # Optional for remote log viewing
+  system.stateVersion = "25.05"; 
 
 }

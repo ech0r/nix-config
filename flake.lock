@@ -312,14 +312,17 @@
         "nixvim": "nixvim_2"
       },
       "locked": {
-        "lastModified": 1740202885,
+        "lastModified": 1741566661,
         "narHash": "sha256-311RJhMyOj+pZhjhVqt3fIqpRdkcRBZQklh2Mi7Gpiw=",
-        "path": "/home/john/dev/nix-config/nixvim",
-        "type": "path"
+        "owner": "ech0r",
+        "repo": "nixvim",
+        "rev": "58de5b719755a6afcdc8e0996f0a04a75cdc8c2f",
+        "type": "github"
       },
       "original": {
-        "path": "/home/john/dev/nix-config/nixvim",
-        "type": "path"
+        "owner": "ech0r",
+        "repo": "nixvim",
+        "type": "github"
       }
     },
     "nixvim_2": {

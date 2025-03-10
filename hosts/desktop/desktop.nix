@@ -6,7 +6,7 @@
   ];
 
         # ==== BOOT ==== 
-          boot.loader.systemd-boot.enable = true;
+        boot.loader.systemd-boot.enable = true;
           boot.loader.efi.canTouchEfiVariables = true;
           boot.initrd.luks.devices."luks-2d406786-24e7-4317-8bb2-2b78bb9a9931".device = "/dev/disk/by-uuid/2d406786-24e7-4317-8bb2-2b78bb9a9931";
           boot.kernelParams = [ "ipv6.disable" ];
@@ -45,6 +45,11 @@
         # ==== Services ====
           services.openssh = {
             enable = true;
+          };
+
+          services.avahi = {
+            enable = true; # Enable Avahi for network discovery
+            nssmdns4 = true;
           };
           
           hardware.bluetooth = {
