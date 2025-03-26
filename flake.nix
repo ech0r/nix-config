@@ -19,7 +19,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-  outputs = { nixpkgs, nixvim, home-manager, disko, ... }: {
+  outputs = { nixpkgs, nixvim, home-manager, disko, nixos-wsl, ... }: {
     nixosConfigurations = {
       desktop = nixpkgs.lib.nixosSystem {
         specialArgs = { 
@@ -45,6 +45,10 @@
         ];
      }; 
      wsl = nixpkgs.lib.nixosSystem {
+       specialArgs = {
+         inherit nixvim;
+         inherit (nixpkgs) lib;
+       };
        system = "x86_64-linux";
        modules = [
          nixos-wsl.nixosModules.default
