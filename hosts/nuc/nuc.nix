@@ -71,7 +71,8 @@ in
       }];
     };
     firewall = {
-      enable = true; # TODO: change this back
+      enable = false; # TODO: change this back
+      logRefusedConnections = true;
       allowedTCPPorts = [ 22 9420 ];
     };
   };
