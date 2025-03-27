@@ -1,6 +1,5 @@
 {
   description = "John's NixOS WSL flake";
-
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-wsl = {
@@ -12,7 +11,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-
   outputs = { self, nixpkgs, nixvim, nixos-wsl }:
   let
     system = "x86_64-linux";
@@ -20,10 +18,9 @@
   in {
     nixosConfigurations.custom-wsl = nixpkgs.lib.nixosSystem {
       inherit system;
-      inherit nvim;
       modules = [
         nixos-wsl.nixosModules.default
-        {
+        ({ pkgs, ... }: {
           wsl = {
             enable = true;
             defaultUser = "nixos";
@@ -31,10 +28,12 @@
           };
           
           # Add your custom NixOS configuration here
-          environment.systemPackages = with nixpkgs.legacyPackages.${system}; [
-            ni
-            vim
+          environment.systemPackages = with pkgs; [
+            # Include the nixvim package from the flake input
             nvim
+            
+            # Include other packages from nixpkgs
+            vim
             git
             curl
             wget
@@ -44,10 +43,9 @@
           time.timeZone = "America/Los_Angeles";
           
           system.stateVersion = "25.11";
-        }
+        })
       ];
     };
-
     apps.${system} = {
       default = {
         type = "app";
