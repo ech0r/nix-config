@@ -16,108 +16,74 @@ in
 
   # Packages that should be installed to the user profile
   home.packages = with pkgs; [
-    ifuse
-    firefox
-    chromium
-    vlc
-
-    # gaming
-    steam
-    lutris
-    wine 
-    winetricks
-
-    # engineering
-    gnuradio
-
-    # nix provisioning
-    nixos-anywhere
-
-    neofetch
-    nnn # terminal file manager
-
-    # terminal
-    kitty
-    tmux
-
-    # archives
-    zip
-    xz
-    unzip
-    p7zip
-    gzip
-
-    # utils
-    ripgrep # recursively searches directories for a regex pattern
-    jq # A lightweight and flexible command-line JSON processor
-    eza # A modern replacement for ‘ls’
-    fzf # A command-line fuzzy finder
-    gparted # disk utility
-    progress
-    caligula # utility for disk imaging
-
-    # networking tools
-    mtr # A network diagnostic tool
-    iperf3
-    dnsutils  # `dig` + `nslookup`
-    ldns # replacement of `dig`, it provide the command `drill`
     aria2 # A lightweight multi-protocol & multi-source command-line download utility
-    socat # replacement of openbsd-netcat
-    nmap # A utility for network discovery and security auditing
-    ipcalc  # it is a calculator for the IPv4/v6 addresses
-    inetutils
-    tcptraceroute
-
-    # misc
+    btop  # replacement of htop/nmon
+    caligula # utility for disk imaging
+    chromium
     cowsay
+    dnsutils  # `dig` + `nslookup`
+    emacs
+    ethtool
+    eza # A modern replacement for ‘ls’
     file
-    which
-    tree
+    firefox
+    fzf # A command-line fuzzy finder
+    gawk
+    gdb
+    glow # markdown previewer in terminal
+    gnupg
+    gnuradio
     gnused
     gnutar
-    gawk
-    zstd
-    gnupg
-
-    # development
-    gdb
-    vscode
-    
-    # LSPs
-    rust-analyzer
     gopls
-    zls
-
-    # nix related
-    nix-output-monitor
-
-    # productivity
+    gparted # disk utility
+    gzip
     hugo # static site generator
-    glow # markdown previewer in terminal
-
-    btop  # replacement of htop/nmon
-    iotop # io monitoring
     iftop # network monitoring
-
-    # system call monitoring
-    strace # system call monitoring
-    ltrace # library call monitoring
-    lsof # list open files
-
-    # system tools
-    sysstat
+    ifuse
+    inetutils
+    iotop # io monitoring
+    ipcalc  # it is a calculator for the IPv4/v6 addresses
+    iperf3
+    jq # A lightweight and flexible command-line JSON processor
+    kitty
+    ldns # replacement of `dig`, it provide the command `drill`
     lm_sensors # for `sensors` command
-    ethtool
-    pciutils # lspci
-    usbutils # lsusb
-
-    # emulation
-    ryujinx
-
-    # editors
+    lsof # list open files
+    ltrace # library call monitoring
+    lutris
+    mtr # A network diagnostic tool
+    neofetch
+    nix-output-monitor
+    nixos-anywhere
+    nmap # A utility for network discovery and security auditing
+    nnn # terminal file manager
     nvim  # Reference the nvim package from nixvim flake
-    emacs
-
+    p7zip
+    pciutils # lspci
+    progress
+    ripgrep # recursively searches directories for a regex pattern
+    rust-analyzer
+    ryujinx
+    simple-http-server
+    socat # replacement of openbsd-netcat
+    steam
+    strace # system call monitoring
+    sysstat
+    tcptraceroute
+    tmux
+    tree
+    unzip
+    usbutils # lsusb
+    vlc
+    vscode
+    which
+    wine 
+    winetricks
+    xz
+    zip
+    zls
+    zstd
   ];
 
   programs.kitty = lib.mkForce {

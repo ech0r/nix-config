@@ -33,7 +33,11 @@ in
   # ==== Virtualization ====
     virtualisation.libvirtd.enable = true;
   
-  # Users
+  # Users and Groups
+  # Create storage group
+  users.groups = {
+    storage = {};
+  };
   users.users.root = {
     hashedPassword = ''$6$aKizz2yq02x5K0QA$xVGMp4iprpgTBZ58oa73oHi4pan4GlVgZhJZMpROZ0cUKPA2wZBrQ0ZccvlSAL2huyrHH98PyHY4zaDYMcQg70'';
     openssh.authorizedKeys.keyFiles = [ 
@@ -44,7 +48,7 @@ in
   users.users.john = {
     isNormalUser = true;
     hashedPassword = ''$6$IWzN/g2rPyMKpb/b$k9sXeq.YutOps0DxISkXSiUCZHhdffoNxsN4hHFlMqzxZ84RUiXrmNh22dHsiaZiEcuoGtH7ekQyrgV/a3I.I0'';
-    extraGroups = [ "wheel" "docker" ]; # Add user to sudo group
+    extraGroups = [ "wheel" "docker" "storage" ]; # Add user to sudo group
     openssh.authorizedKeys.keyFiles = [ 
       ../../shared/authorized_keys
     ];
@@ -71,9 +75,8 @@ in
       }];
     };
     firewall = {
-      enable = false; # TODO: change this back
-      logRefusedConnections = true;
-      allowedTCPPorts = [ 22 9420 ];
+      enable = true; 
+      allowedTCPPorts = [ 22 6080 5900 9420 ];
     };
   };
 
@@ -112,6 +115,7 @@ in
     tmux
     vim
     nvim
+    qemu
   ];
 
   services.jellyfin = {

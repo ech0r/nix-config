@@ -14,10 +14,6 @@
             "aarch64-linux"
           ];
 
-        # ==== STORAGE ====
-          boot.supportedFilesystems = [ "zfs" ];
-          boot.zfs.forceImportRoot = false;
-
         # ==== NETWORK ====
           networking = {
             hostName = "tower"; 
@@ -182,6 +178,11 @@
 
         # ==== VIRTUALIZATION ====
           virtualisation.docker.enable = true;
+          virtualisation.libvirtd.enable = true;
+          virtualisation.spiceUSBRedirection.enable = true;
+          
+          programs.virt-manager.enable = true;
+          users.groups.libvirtd.members = [ "john" ];
 
 
         # ==== GROUPS ====
@@ -197,7 +198,6 @@
             docker
             docker-compose
             git 
-            zfs
             xclip
             qemu
             linuxKernel.packages.linux_zen.xpadneo
