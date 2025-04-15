@@ -36,7 +36,9 @@ in
   # Users and Groups
   # Create storage group
   users.groups = {
-    storage = {};
+    storage = {
+      gid = 500;
+    };
   };
   users.users.root = {
     hashedPassword = ''$6$aKizz2yq02x5K0QA$xVGMp4iprpgTBZ58oa73oHi4pan4GlVgZhJZMpROZ0cUKPA2wZBrQ0ZccvlSAL2huyrHH98PyHY4zaDYMcQg70'';
