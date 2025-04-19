@@ -30,16 +30,29 @@ in
     autoScrub.interval = "quarterly";
   };
 
+
+  # ==== Cron ====
+  services.cron = 
+  let 
+    disk-keep-alive = ./. + "/disk-keep-alive.sh"; 
+    in {
+      enable = true;
+      systemCronJobs = [ 
+        "@reboot root ${disk-keep-alive}"
+      ];
+    };
+
   # ==== Virtualization ====
     virtualisation.libvirtd.enable = true;
   
-  # Users and Groups
+  # ==== Users and Groups ====
   # Create storage group
   users.groups = {
     storage = {
       gid = 500;
     };
   };
+
   users.users.root = {
     hashedPassword = ''$6$aKizz2yq02x5K0QA$xVGMp4iprpgTBZ58oa73oHi4pan4GlVgZhJZMpROZ0cUKPA2wZBrQ0ZccvlSAL2huyrHH98PyHY4zaDYMcQg70'';
     openssh.authorizedKeys.keyFiles = [ 
@@ -58,7 +71,7 @@ in
 
   nix.settings.trusted-users = [ "@wheel" ];
 
-  # ==== Networking ====
+  # ============ Networking =============
   networking = {
     defaultGateway = "192.168.1.1";
     nameservers = [
@@ -82,10 +95,25 @@ in
     };
   };
 
-  # ==== VIRTUALIZATION ====
+  # ============ virtualisation ===============
     virtualisation.docker.enable = true;
 
-  # Services
+  # =============== Services ==================
+  services.tailscale = {
+    enable = true;
+  };
+
+  services.nginx = {
+    enable = true;
+    recommendedProxySettings = true;
+    virtualHosts."nuc.tail54b865.ts.net" = {
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:6080";
+        proxyWebsockets = true;
+      };
+    };
+  };
+
   services.openssh = {
     enable = true;
     settings = {
