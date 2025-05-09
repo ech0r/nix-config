@@ -102,6 +102,12 @@
             xkb.variant = "";
           };
 
+       # # set cursor size and dpi for 4k monitor
+        #   xresources.properties = {
+        #     "Xcursor.size" = 12;
+        #     "Xft.dpi" = 110;
+        #   };
+
 
         # ==== AUDIO ====
           #sound.enable = true;
@@ -122,17 +128,31 @@
           services.xserver.windowManager.dwm.enable = true;
           # services.xserver.windowManager.dwm.package = pkgs.dwm.override {
           #   patches = [
+          #     (pkgs.fetchpatch {})
+          #     (pkgs.fetchpatch {})
+          #     (pkgs.fetchpatch {})
+          #     (pkgs.fetchpatch {})
           #
           #   ];
           # };
 
         # ==== FONTS ====;
-          fonts.packages = with pkgs; [
+        fonts = {
+          fontconfig = {
+            hinting = {
+              style = "full";
+              enable = true;
+            };
+            antialias = true;
+          };
+          packages = with pkgs; [
             cantarell-fonts
+            nerd-fonts.iosevka
             nerd-fonts.fira-code
 	    nerd-fonts.symbols-only
 	    nerd-fonts.droid-sans-mono
           ];
+        };
 
         # ==== OPENGL ==== 
         # hardware.opengl = {

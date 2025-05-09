@@ -11,7 +11,7 @@ in
   # set cursor size and dpi for 4k monitor
   xresources.properties = {
     "Xcursor.size" = 12;
-    "Xft.dpi" = 96;
+    "Xft.dpi" = 110;
   };
 
   # Packages that should be installed to the user profile
@@ -89,8 +89,8 @@ in
   programs.kitty = lib.mkForce {
     enable = true;
     font = {
-      package = pkgs.nerd-fonts.fira-code;
-      name = "Fira Code Nerd Font Mono";
+      package = pkgs.nerd-fonts.iosevka;
+      name = "Iosevka";
       size = 12;
     }; 
     settings = {

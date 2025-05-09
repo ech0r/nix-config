@@ -17,14 +17,22 @@ in
   nix.settings.experimental-features = ["nix-command" "flakes"];
 
   # Boot settings
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.kernelParams = [ "ipv6.disable=1" ];
-
-  # ==== STORAGE ====
-  boot.supportedFilesystems = [ "zfs" ];
-  boot.zfs.forceImportRoot = false;
-  boot.zfs.extraPools = [ "storage" ];
+  boot = {
+    loader =  {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+    kernelParams = [ 
+      "ipv6.disable=1" 
+      "usbcore.autosuspend=-1"
+    ];
+    # ==== STORAGE ====
+    supportedFilesystems = [ "zfs" ];
+    zfs = {
+      forceImportRoot = false;
+      extraPools = [ "storage" ];
+    };
+  };
   services.zfs = {
     autoScrub.enable = true;
     autoScrub.interval = "quarterly";
@@ -92,6 +100,12 @@ in
     firewall = {
       enable = true; 
       allowedTCPPorts = [ 22 6080 5900 9420 ];
+      # allowedUDPPortRanges = [
+      #   {
+      #     from = 49152;
+      #     to = 65525;
+      #   }
+      # ];
     };
   };
 
