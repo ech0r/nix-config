@@ -178,7 +178,7 @@ in
     vim
     nvim
     qemu
-    rocm-opencl-runtime
+    # rocm-opencl-runtime
     clinfo
   ];
 
@@ -197,7 +197,7 @@ in
       Type = "simple";
       User = "john";
       WorkingDirectory = "/home/john/vm";
-      ExecStart = "nix run";
+      ExecStart = "/home/john/vm/result/bin/run-nixos-vm-vm";
       Restart = "always";
     };
   };

@@ -38,6 +38,7 @@ in
     gopls
     gparted # disk utility
     gzip
+    htop
     hugo # static site generator
     iftop # network monitoring
     ifuse
