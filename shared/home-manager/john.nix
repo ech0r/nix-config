@@ -101,6 +101,7 @@ in
       window_padding_width = 10;
       background_opacity = "0.5";
       background_blur = 5;
+      clipboard_control = "write-clipboard write-primary read-clipboard read-primary";
       term = "xterm-256color";
       symbol_map = let
         mappings = [

@@ -25,7 +25,11 @@ in
     kernelParams = [ 
       "ipv6.disable=1" 
       "usbcore.autosuspend=-1"
+      "usb_storage"
     ];
+    extraModprobeConfig = ''
+      options usb-storage delay_use=1
+    '';
     # ==== STORAGE ====
     supportedFilesystems = [ "zfs" ];
     zfs = {
@@ -99,7 +103,7 @@ in
     };
     firewall = {
       enable = true; 
-      allowedTCPPorts = [ 22 6080 5900 9420 ];
+      allowedTCPPorts = [ 22 2049 6080 5900 9420 ];
       # allowedUDPPortRanges = [
       #   {
       #     from = 49152;
@@ -113,6 +117,20 @@ in
     virtualisation.docker.enable = true;
 
   # =============== Services ==================
+
+  services.udev.extraRules = ''
+    # Disable USB suspend on all storage devices
+    ACTION=="add", SUBSYSTEM=="usb", TEST=="power/control", ATTR{power/control}="on"
+  '';
+
+
+  services.nfs.server = {
+    enable = true;
+    exports = ''
+      /storage/jellyfin/downloads 10.0.2.15(rw,no_subtree_check,fsid=0,no_root_squash,insecure) 192.168.1.0/24(rw,no_subtree_check,fsid=0,no_root_squash,insecure)
+    '';
+  };
+
   services.tailscale = {
     enable = true;
   };
@@ -160,6 +178,8 @@ in
     vim
     nvim
     qemu
+    rocm-opencl-runtime
+    clinfo
   ];
 
   services.jellyfin = {
@@ -169,6 +189,18 @@ in
 
   # Optional: Home-Manager (if you're using it)
   # programs.home-manager.enable = true;
+  systemd.services.start-vm = {
+    description = "Start NixOS VM in homedir";
+    after = [ "network.target" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "simple";
+      User = "john";
+      WorkingDirectory = "/home/john/vm";
+      ExecStart = "nix run";
+      Restart = "always";
+    };
+  };
 
   # Logging
   systemd.services.journal-gatewayd.enable = true; # Optional for remote log viewing
