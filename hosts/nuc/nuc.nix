@@ -7,6 +7,7 @@ in
 {
   # Import the hardware configuration dynamically
   imports = [
+    ../../shared/home-manager/home-manager.nix
     ./hardware-configuration.nix
   ];
   
@@ -15,6 +16,9 @@ in
 
   #nix settings
   nix.settings.experimental-features = ["nix-command" "flakes"];
+
+  # ==== UNFREE PACKAGES ====
+  nixpkgs.config.allowUnfree = true;
 
   # Boot settings
   boot = {
