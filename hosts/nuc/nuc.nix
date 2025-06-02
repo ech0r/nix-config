@@ -20,7 +20,7 @@ in
   # ==== UNFREE PACKAGES ====
   nixpkgs.config.allowUnfree = true;
 
-  # Boot settings
+  # ==== BOOT SETTINGS ====
   boot = {
     loader =  {
       systemd-boot.enable = true;
@@ -34,18 +34,18 @@ in
     extraModprobeConfig = ''
       options usb-storage delay_use=1
     '';
-    # ==== STORAGE ====
-    supportedFilesystems = [ "zfs" ];
-    zfs = {
-      forceImportRoot = false;
-      extraPools = [ "storage" ];
-    };
+  };
+
+  # ==== ZFS ====
+  boot.supportedFilesystems = [ "zfs" ];
+  boot.zfs = {
+    forceImportRoot = false;
+    extraPools = [ "storage" ];
   };
   services.zfs = {
     autoScrub.enable = true;
     autoScrub.interval = "quarterly";
   };
-
 
   # ==== Cron ====
   services.cron = 
@@ -59,23 +59,20 @@ in
     };
 
   # ==== Virtualization ====
-    virtualisation.libvirtd.enable = true;
-  
+  virtualisation.libvirtd.enable = true;
+
   # ==== Users and Groups ====
-  # Create storage group
   users.groups = {
     storage = {
       gid = 500;
     };
   };
-
   users.users.root = {
     hashedPassword = ''$6$aKizz2yq02x5K0QA$xVGMp4iprpgTBZ58oa73oHi4pan4GlVgZhJZMpROZ0cUKPA2wZBrQ0ZccvlSAL2huyrHH98PyHY4zaDYMcQg70'';
     openssh.authorizedKeys.keyFiles = [ 
       ../../shared/authorized_keys
     ];
   };
-
   users.users.john = {
     isNormalUser = true;
     hashedPassword = ''$6$IWzN/g2rPyMKpb/b$k9sXeq.YutOps0DxISkXSiUCZHhdffoNxsN4hHFlMqzxZ84RUiXrmNh22dHsiaZiEcuoGtH7ekQyrgV/a3I.I0'';
@@ -84,10 +81,9 @@ in
       ../../shared/authorized_keys
     ];
   };
-
   nix.settings.trusted-users = [ "@wheel" ];
 
-  # ============ Networking =============
+  # ===== NETWORKING =====
   networking = {
     defaultGateway = "192.168.1.1";
     nameservers = [
@@ -108,30 +104,23 @@ in
     firewall = {
       enable = true; 
       allowedTCPPorts = [ 22 2049 6080 5900 9420 ];
-      # allowedUDPPortRanges = [
-      #   {
-      #     from = 49152;
-      #     to = 65525;
-      #   }
-      # ];
     };
   };
 
-  # ============ virtualisation ===============
+  # ==== VIRTUALISATION =====
     virtualisation.docker.enable = true;
 
-  # =============== Services ==================
-
+  # ==== OTHER SERVICES =====
   services.udev.extraRules = ''
     # Disable USB suspend on all storage devices
     ACTION=="add", SUBSYSTEM=="usb", TEST=="power/control", ATTR{power/control}="on"
   '';
 
-
+  # ==== NFS ====
   services.nfs.server = {
     enable = true;
     exports = ''
-      /storage/jellyfin/downloads 10.0.2.15(rw,no_subtree_check,fsid=0,no_root_squash,insecure) 192.168.1.0/24(rw,no_subtree_check,fsid=0,no_root_squash,insecure)
+      /storage/photos 192.168.1.0/24(rw,no_subtree_check,fsid=0,no_root_squash,insecure)
     '';
   };
 
@@ -142,9 +131,13 @@ in
   services.nginx = {
     enable = true;
     recommendedProxySettings = true;
-    virtualHosts."nuc.tail54b865.ts.net" = {
-      locations."/" = {
+    virtualHosts."nuc.lan" = {
+      locations."/vm" = {
         proxyPass = "http://127.0.0.1:6080";
+        proxyWebsockets = true;
+      };
+      locations."/jellyfin" = {
+        proxyPass = "http://127.0.0.1:8096";
         proxyWebsockets = true;
       };
     };
