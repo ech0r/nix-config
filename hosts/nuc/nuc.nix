@@ -103,7 +103,17 @@ in
     };
     firewall = {
       enable = true; 
-      allowedTCPPorts = [ 22 2049 6080 5900 9420 ];
+      allowedTCPPorts = [ 
+        22    # ssh
+        2049  # nfs
+        111   # nfs
+        20048 # nfs
+        32765 # nfs
+        32768 # nfs
+        6080  # vnc/vm
+        5900  # vnc/vm 
+        9420 
+      ];
     };
   };
 
@@ -119,6 +129,9 @@ in
   # ==== NFS ====
   services.nfs.server = {
     enable = true;
+    mountdPort = 20048;
+    statdPort = 32765;
+    lockdPort = 32768;
     exports = ''
       /storage/photos 192.168.1.0/24(rw,no_subtree_check,fsid=0,no_root_squash,insecure)
     '';
@@ -133,12 +146,22 @@ in
     recommendedProxySettings = true;
     virtualHosts."nuc.lan" = {
       locations."/vm" = {
-        proxyPass = "http://127.0.0.1:6080";
-        proxyWebsockets = true;
+        extraConfig = ''
+          rewrite ^/vm(.*)$ $1 break;
+          proxy_pass http://127.0.0.1:6080;
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection $connection_upgrade;
+        '';
       };
       locations."/jellyfin" = {
-        proxyPass = "http://127.0.0.1:8096";
-        proxyWebsockets = true;
+        extraConfig = ''
+          rewrite ^/jellyfin(.*)$ $1 break;
+          proxy_pass http://127.0.0.1:8096;
+          proxy_http_version 1.1;
+          proxy_set_header Upgrade $http_upgrade;
+          proxy_set_header Connection $connection_upgrade;
+        '';
       };
     };
   };

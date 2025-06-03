@@ -177,6 +177,8 @@
 
         # ==== UDEV ====
           services.udev.extraRules = ''
+          # iPhone
+          SUBSYSTEM=="usb", ATTR{idVendor}=="05ac", MODE="0666", GROUP="plugdev"
           ${builtins.readFile ../../shared/udev/50-zsa.rules}
           ${builtins.readFile ../../shared/udev/50-stm.rules}
           ${builtins.readFile ../../shared/udev/69-probe-rs.rules}
@@ -225,6 +227,12 @@
             xclip
             qemu
             linuxKernel.packages.linux_zen.xpadneo
+            # iphone connectivity
+            libimobiledevice
+            ifuse
+            usbmuxd
+            # nfs
+            nfs-utils
           ];
 
         # ==== SYSTEM STATE VERSION ====
