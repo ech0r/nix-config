@@ -58,28 +58,42 @@ in
       ];
     };
 
+  # ==== Swapfile ====
+  swapDevices = [{
+    device = "/var/lib/swapfile";
+    size = 16*1024;
+  }];
+
   # ==== Virtualization ====
   virtualisation.libvirtd.enable = true;
 
   # ==== Users and Groups ====
-  users.groups = {
-    storage = {
-      gid = 500;
+  users = { 
+    groups = {
+      storage = {
+        gid = 500;
+      };
     };
-  };
-  users.users.root = {
-    hashedPassword = ''$6$aKizz2yq02x5K0QA$xVGMp4iprpgTBZ58oa73oHi4pan4GlVgZhJZMpROZ0cUKPA2wZBrQ0ZccvlSAL2huyrHH98PyHY4zaDYMcQg70'';
-    openssh.authorizedKeys.keyFiles = [ 
-      ../../shared/authorized_keys
-    ];
-  };
-  users.users.john = {
-    isNormalUser = true;
-    hashedPassword = ''$6$IWzN/g2rPyMKpb/b$k9sXeq.YutOps0DxISkXSiUCZHhdffoNxsN4hHFlMqzxZ84RUiXrmNh22dHsiaZiEcuoGtH7ekQyrgV/a3I.I0'';
-    extraGroups = [ "wheel" "docker" "storage" ]; # Add user to sudo group
-    openssh.authorizedKeys.keyFiles = [ 
-      ../../shared/authorized_keys
-    ];
+    users = { 
+      root = {
+        hashedPassword = ''$6$aKizz2yq02x5K0QA$xVGMp4iprpgTBZ58oa73oHi4pan4GlVgZhJZMpROZ0cUKPA2wZBrQ0ZccvlSAL2huyrHH98PyHY4zaDYMcQg70'';
+        openssh.authorizedKeys.keyFiles = [ 
+          ../../shared/authorized_keys
+        ];
+      };
+      john = {
+        isNormalUser = true;
+        hashedPassword = ''$6$IWzN/g2rPyMKpb/b$k9sXeq.YutOps0DxISkXSiUCZHhdffoNxsN4hHFlMqzxZ84RUiXrmNh22dHsiaZiEcuoGtH7ekQyrgV/a3I.I0'';
+        extraGroups = [ "wheel" "docker" "storage" ]; # Add user to sudo group
+        openssh.authorizedKeys.keyFiles = [ 
+          ../../shared/authorized_keys
+        ];
+      };
+      jellyfin = {
+        isSystemUser = true;
+        uid = 997;
+      };
+    };
   };
   nix.settings.trusted-users = [ "@wheel" ];
 
@@ -105,6 +119,7 @@ in
       enable = true; 
       allowedTCPPorts = [ 
         22    # ssh
+        80    # http
         2049  # nfs
         111   # nfs
         20048 # nfs
@@ -116,9 +131,6 @@ in
       ];
     };
   };
-
-  # ==== VIRTUALISATION =====
-    virtualisation.docker.enable = true;
 
   # ==== OTHER SERVICES =====
   services.udev.extraRules = ''
@@ -133,6 +145,7 @@ in
     statdPort = 32765;
     lockdPort = 32768;
     exports = ''
+      /storage/jellyfin/downloads 192.168.1.0/24(rw,no_subtree_check,fsid=0,no_root_squash,insecure)
       /storage/photos 192.168.1.0/24(rw,no_subtree_check,fsid=0,no_root_squash,insecure)
     '';
   };
@@ -147,20 +160,39 @@ in
     virtualHosts."nuc.lan" = {
       locations."/vm" = {
         extraConfig = ''
-          rewrite ^/vm(.*)$ $1 break;
-          proxy_pass http://127.0.0.1:6080;
+          return 302 /vm/; 
+        '';
+      };
+      locations."/vm/" = {
+        extraConfig = ''
+          proxy_pass http://127.0.0.1:6080/;
           proxy_http_version 1.1;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
           proxy_set_header Upgrade $http_upgrade;
-          proxy_set_header Connection $connection_upgrade;
+          proxy_set_header Connection "upgrade";
         '';
       };
       locations."/jellyfin" = {
         extraConfig = ''
-          rewrite ^/jellyfin(.*)$ $1 break;
           proxy_pass http://127.0.0.1:8096;
           proxy_http_version 1.1;
+          proxy_set_header Host $host;
+          proxy_set_header X-Real-IP $remote_addr;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+
+          # Fix for WebSocket support
           proxy_set_header Upgrade $http_upgrade;
-          proxy_set_header Connection $connection_upgrade;
+          proxy_set_header Connection "upgrade";
+
+          # Rewrite base path
+          proxy_redirect off;
+          sub_filter_once off;
+          sub_filter 'href="/' 'href="/jellyfin/';
+          sub_filter 'src="/' 'src="/jellyfin/';
         '';
       };
     };
@@ -187,13 +219,12 @@ in
 
   # Software
   environment.systemPackages = with pkgs; [
-    docker
-    docker-compose
     git
     htop
     jellyfin
     jellyfin-ffmpeg
     jellyfin-web
+    inotify-tools
     tmux
     vim
     nvim
@@ -207,23 +238,51 @@ in
     openFirewall = true;
   };
 
-  # Optional: Home-Manager (if you're using it)
   # programs.home-manager.enable = true;
-  systemd.services.start-vm = {
-    description = "Start NixOS VM in homedir";
-    after = [ "network.target" ];
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig = {
-      Type = "simple";
-      User = "john";
-      WorkingDirectory = "/home/john/vm";
-      ExecStart = "/home/john/vm/result/bin/run-nixos-vm-vm";
-      Restart = "always";
+  systemd = {
+    services = {
+      # enforce-jellyfin-downloads = {
+      #   description = "Fix Jellyfin Downloads Permissions";
+      #   wantedBy = [ "multi-user.target" ];
+      #   after = [ "network.target" ];
+      #   serviceConfig = {
+      #     Type = "simple";
+      #     Restart = "always";
+      #     ExecStart = pkgs.writeShellScript "fix-downloads.sh" ''
+      #       WATCH_DIR="/storage/jellyfin/downloads/incomplete"
+      #       OWNER="jellyfin"
+      #       GROUP="storage"
+      #       PERMS="0775"
+      #
+      #       # Initial fix
+      #       chown -R "$OWNER:$GROUP" "$WATCH_DIR"
+      #       find "$WATCH_DIR" -type d -exec chmod "$PERMS" {} +
+      #       find "$WATCH_DIR" -type f -exec chmod "$PERMS" {} +
+      #
+      #       # Watch and fix
+      #       ${pkgs.inotify-tools}/bin/inotifywait -mrq -e create -e moved_to -e attrib --format "%w%f" "$WATCH_DIR" | while read path; do
+      #         chown "$OWNER:$GROUP" "$path"
+      #         chmod "$PERMS" "$path"
+      #       done
+      #     '';
+      #     User = "root";
+      #   };
+      # };
+      start-vm = {
+        description = "Start NixOS VM in homedir";
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          Type = "simple";
+          User = "john";
+          WorkingDirectory = "/home/john/vm";
+          ExecStart = "/home/john/vm/result/bin/run-nixos-vm-vm";
+          Restart = "always";
+        };
+      };
+      journal-gatewayd.enable = true;
     };
   };
-
   # Logging
-  systemd.services.journal-gatewayd.enable = true; # Optional for remote log viewing
   system.stateVersion = "25.05"; 
-
 }

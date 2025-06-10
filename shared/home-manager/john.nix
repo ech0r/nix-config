@@ -167,7 +167,7 @@ in
   programs.git = {
     enable = true;
     userName = "ech0r";
-    userEmail = "john@coyote.tech";
+    userEmail = "john@coyote.technology";
     extraConfig = {
       credential.helper = "${
         pkgs.git.override { withLibsecret = true; }
